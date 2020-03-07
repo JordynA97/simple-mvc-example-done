@@ -27,17 +27,21 @@ const router = require('./router.js');
 // The string after mongodb://localhost is the database name. It can be anything you want.
 const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/simpleMVCExample';
 
+//options
+const mongooseOptions = {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+}
 // call mongoose's connect function and pass in the url.
 // If there are any errors connecting, we will throw it and kill the server.
 // Once connected, the mongoose package will stay connected for every file
 // that requires it in this project
-mongoose.connect(dbURL, (err) => {
+mongoose.connect(dbURL, mongooseOptions, (err) => {
   if (err) {
     console.log('Could not connect to database');
     throw err;
   }
 });
-
 
 // Port set by process.env.PORT environment variable.
 // If the process.env.PORT variable or the env.NODE_PORT variables do not exist, use port 3000
