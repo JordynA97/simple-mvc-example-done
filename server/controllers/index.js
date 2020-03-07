@@ -36,13 +36,6 @@ const hostIndex = (req, res) => {
     title: 'Home',
     pageName: 'Home Page',
   });
-
-  res.render('index', {
-    currentName: lastDogAdded.name,
-    title: 'Home',
-    pageName: 'Home Page',
-
-  });
 }
 
 // function to find all cats on request.
@@ -115,11 +108,10 @@ const hostPage1 = (req, res) => {
     }
 
     // return success
-    return res.render('page1', { cats: docs, dogs: docs });
+    return res.render('page1', {cats: docs});
   };
 
   readAllCats(req, res, callback);
-  readAllDogs(req, res, callback);
 };
 
 // function to handle requests to the page2 page
@@ -150,7 +142,16 @@ const hostPage3 = (req, res) => {
 
 //handle page 4 requests
 const hostPage4 = (req, res) => {
-  res.render('page4');
+
+  const callback = (err, docs) => {
+    if (err) {
+      return res.json({ err }); // if error, return it
+    }
+
+    // return success
+   return res.render('page4', { dogs: docs });  
+  };
+  readAllDogs(req, res, callback);
 };
 
 // function to handle get request to send the name
@@ -231,12 +232,12 @@ const setDog = (req, res) => {
 
   const savePromise = newDog.save();
 
-  savePromise.them(() => {
+  savePromise.then(() => {
     lastDogAdded = newDog;
     res.json({name:lastDogAdded.name, breed: lastDogAdded.breed, age: lastDogAdded.age});
   });
 
-  savePromose.catch((err) => res.json({err}));
+  savePromise.catch((err) => res.json({err}));
 
   return res;
 }
@@ -281,6 +282,31 @@ const searchName = (req, res) => {
   });
 };
 
+//search for dog
+const searchDog = (req, res) => {
+  
+  if(!req.query.name){
+    return res.status(400).json({error: 'Name is required to search'});
+  }
+
+  return Dog.findByName(req.query.name, (err, doc) => {
+    if(err){
+      return res.status(500).json({err});
+    }
+
+    if(!doc){
+      res.json({ error: 'No Dogs Found'});
+    }
+
+    //increase age with search
+    doc.age++;
+
+    const savePromise = doc.save();
+
+    return savePromise.then(() => res.json({ name: doc.name, breed: doc.breed, age: doc.age}));
+  })
+}
+
 // function to handle a request to update the last added object
 // this PURELY exists to show you how to update a model object
 // Normally for an update, you'd get data from the client,
@@ -310,11 +336,11 @@ const updateLast = (req, res) => {
 const updateDog = (req, res) => {
   lastDogAdded.age++;
 
-  const savePromise = lastDog.save();
+  const savePromise = lastDogAdded.save();
 
   savePromise.then(() => res.json({name: lastDogAdded.name, breed: lastDogAdded.breed, age: lastDogAdded.age}));
 
-  save.catch((err) => res.json({err}));
+  savePromise.catch((err) => res.status(500).json({err}));
 };
 
 // function to handle a request to any non-real resources (404)
@@ -348,5 +374,6 @@ module.exports = {
   updateLast,
   updateDog,
   searchName,
+  searchDog,
   notFound,
 };

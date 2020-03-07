@@ -15,7 +15,7 @@ const DogSchema = new mongoose.Schema({
     },
   
     breed: {
-      type: Number,
+      type: String,
       required: true,
       trim: true,
     },
@@ -23,10 +23,10 @@ const DogSchema = new mongoose.Schema({
     age: {
         type: Number,
         required: true,
-        min: 0,
+        min: 1,
     },
 
-    createdData: {
+    createdDate: {
       type: Date,
       default: Date.now,
     },

@@ -25,18 +25,13 @@ const router = require('./router.js');
 // node application by Heroku is you are using mongoLab
 // otherwise fallback to localhost.
 // The string after mongodb://localhost is the database name. It can be anything you want.
-const dbURL = process.env.MONGODB_URI || 'mongodb://localhost/simpleMVCExample';
+const dbURL = process.env.MONGODB_URI || 'mongodb://heroku_6v0xkgbw:9tl3uth2m2uu4dnnusm7b0eq47@ds029117.mlab.com:29117/heroku_6v0xkgbw';
 
-//options
-const mongooseOptions = {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-}
 // call mongoose's connect function and pass in the url.
 // If there are any errors connecting, we will throw it and kill the server.
 // Once connected, the mongoose package will stay connected for every file
 // that requires it in this project
-mongoose.connect(dbURL, mongooseOptions, (err) => {
+mongoose.connect(dbURL, (err) => {
   if (err) {
     console.log('Could not connect to database');
     throw err;
