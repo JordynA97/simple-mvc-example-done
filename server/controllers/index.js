@@ -301,7 +301,7 @@ const searchDog = (req, res) => {
     }
 
     //increase age with search
-    doc.age++;
+    //doc.age++;
 
     const savePromise = doc.save();
 
