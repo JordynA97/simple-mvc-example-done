@@ -17,7 +17,8 @@ const defaultDog = {
   age: 0,
 }
 
-// object for us to keep track of the last Cat we made and dynamically update it sometimes
+// object for us to keep track of the last Cat we made
+// and dynamically update it sometimes
 let lastCatAdded = new Cat(defaultCat);
 let lastDogAdded = new Dog(defaultDog);
 
@@ -272,7 +273,8 @@ const searchName = (req, res) => {
     }
 
     // if no matches, let them know
-    // (does not necessarily have to be an error since technically it worked correctly)
+    // (does not necessarily have to be an error
+    // since technically it worked correctly)
     if (!doc) {
       return res.json({ error: 'No cats found' });
     }
@@ -295,7 +297,7 @@ const searchDog = (req, res) => {
     }
 
     if(!doc){
-      res.json({ error: 'No Dogs Found'});
+      return res.json({ error: 'No Dogs Found'});
     }
 
     //increase age with search
